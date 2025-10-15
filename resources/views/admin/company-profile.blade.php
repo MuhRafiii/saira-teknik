@@ -42,6 +42,12 @@
                     class="w-full border rounded px-3 py-2 text-sm sm:text-base">
             </div>
 
+            <div>
+                <label class="block text-sm font-medium">Google Maps Link</label>
+                <input type="text" name="gmaps" value="{{ old('gmaps', $profile->gmaps) }}"
+                    class="w-full border rounded px-3 py-2 text-sm sm:text-base">
+            </div>
+
             <div class="lg:col-span-2">
                 <label class="block text-sm font-medium">Description</label>
                 <textarea name="description" rows="4"
@@ -52,16 +58,23 @@
                 <label class="block text-sm font-medium">Logo</label>
                 <input type="file" name="logo" class="block mt-1 border border-gray-300 rounded px-3 py-2 cursor-pointer hover:bg-gray-200">
                 @if ($profile->logo)
-                    <img src="{{ $profile->logo }}" alt="Logo" class="mt-2 w-24 h-24 object-contain">
+                    <img src="{{ $profile->logo }}" alt="Logo" class="mt-2 w-24 h-24 object-contain rounded-md">
+                @endif
+            </div>
+
+            <div class="lg:col-span-2">
+                <label class="block text-sm font-medium">Banner</label>
+                <input type="file" name="banner" class="block mt-1 border border-gray-300 rounded px-3 py-2 cursor-pointer hover:bg-gray-200">
+                @if ($profile->banner)
+                    <img src="{{ $profile->banner }}" alt="Logo" class="mt-2 h-24 object-contain rounded-md">
                 @endif
             </div>
         </div>
 
         <div class="mt-6 flex gap-4">
-            <button type="submit"
-                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm sm:text-base cursor-pointer">Save Changes</button>
-            <a href="{{ route('admin.dashboard') }}"
-                class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md text-sm sm:text-base">Back</a>
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm sm:text-base cursor-pointer">
+                Save Changes
+            </button>
         </div>
     </form>
 </div>

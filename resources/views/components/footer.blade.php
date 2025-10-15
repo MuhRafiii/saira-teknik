@@ -33,9 +33,9 @@
                             alt="phone">
                             <a href="https://wa.me/{{ $company->phone }}" class="hover:underline">{{ $company->phone }}</a>
                         </li>
-                        <li class="flex items-center gap-2">
+                        <li class="flex gap-2">
                             <img
-                            class="w-5"
+                            class="w-5 h-5"
                             src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAAE0UlEQVR4nO3dW4hWVRTA8dV4SXLGiiysoPukD0GShdFjIDmGRpQEJWaUXV66PhTdn4puBl7eyofUrCBoJuohskSI7OaDGT05pNOYeSVLytL5x8YdRKTON7PX2Wvt/f1gYPiG+VjrOzNnn73XOvuItLW1FQA4C7gJeAZYC3wD9AP7gD/j1774WvjZm8DT8XfOzB1/EYAZwCvAt8AQIxd+d3N8ryty5+UK0AU8DGxBT3jvh4DO3PmaBZweT0d7ac6eeFo7LXf+ZgAnAQuBn8kn/BHcHWKRmgEXAhuwYz1wgdQIuCFeFVnzCzBfKjtFvYBtQ8BzxZ/CgDHAa/jxBjBOShQSA3rx5z1grBR4mlqJX6uLOn05GDOG43kpATB3lMseVoQcbhTPgPMannlr2x/mTuJ43LA06UvlU5fjCbCIct0mDhcKd1Gun4BJ4gXwLOV7QjwAJgK7Kd8eF/WUWFyqxYNiXSyV1mKLWAZcSX0uF6uAJQ19CNuBZcBsYFoctybG78Nry4GBhmJ5UayK3SGafoyl1hOuvgIdodAE/KAc0yYx3DeluWbVGzpSRtjF0qcY1xFgslgTG9K0LA1/8aOIrSO+hxZ7i46xhUfDh6HSmCC+DsUC2ZNiTWzd1BgzuhLGGE5fgwpxrhZrgK8VEr1TIc7FCnF+KdYoXM1sT3Gq+p84xypcEveLNQqFqKWKsYZ5Skq7xRrgUOIkexRjnZM41j/EGuBw4iS7FWOdmjjWv8Qa4LfESXYqxtqZONYDYo1ChbBLMdZw+ZvSTrEG+D5xkpcqxhoWIVPaLNbEVv5aB/WPxZrYbpnScsVYVySOdaVYAzyeOMkBRxPDR8QaYB7p3aUQ5z0Kcc4Sa4CLFBIdTLy4OAnYoRDn2WK0dfSA8eX3PoX49opVwEbqK1CtE6uAl9DTN8ISbjhNva8Y11NiVez40LQLeKCFJoeFSmPGv80Uq4BTwson+gbiEnpPnHV3xq9pcdK3oqE2oP0al+ZJxfsnavGuWBcK/tTjXrEOmE4djgDnigfAd5TvE/EibnlUusXiBXBxIbdCH0vYTvAM8ST0KlGuXvEm3F1EueaLN2HbPIXGBwsG3e4Q5GwrJv9rVxXOSQ4BU8Qz4DPKsUq8A26lHDOlkJ3kwvbf3q2TUgD34d+1Ugrg5Hg3lFcbpTRxr3WvrpfSxGpizu3ER2qTyw3LCv4v6ZFSAeOBrfixXkoHLMCHIeBqKV1szwmPJLLubakFcB32C1DdUhPgA+x6WWoDXNJQU12rdgKnSo3CfurYc7vUKk4WtTcYa8VXo+myLwJwCzYcDntG5v48TFDe8W24Xs39OVh7isKv5LPNxabIFbUNzcudv9UHhn2R4WC8lTt3s4DLGp6bhHJA+0nSxwM82uABuTl3vl4WHzc0cDDW5M7VDaAbOKh4MHa4617PDZ0tMP6pc8zOnZ9L6OwFXN9KbuIO+v6EByMUxsbnzss14KpEO56GWyOm5s6nCMBjCQ7Iotx5lHYp/NEoDsY7uXMoDjAlVvNatbXaCqA24JoWx5PfgRm54y4acH8LB+SO3PFWAXh9GAdjWe44qwFMOMF98J+35xsNA84/xiAfbls+J3d8VeLogywP/mcQ938foGcc3UFuW2wnmpM7nra2NlH0NwrlaFY6JmdyAAAAAElFTkSuQmCC"
                             alt="marker">
                             <a href="https://maps.app.goo.gl/hJ8KLDYWcpPt5vJN6" class="hover:underline">{{ $company->address }}</a>
@@ -50,6 +50,7 @@
                         <li><a href="{{ route('home') }}" class="hover:text-blue-400">Home</a></li>
                         <li><a href="{{ route('category.index') }}" class="hover:text-blue-400">Categories</a></li>
                         <li><a href="{{ route('product.index') }}" class="hover:text-blue-400">Products</a></li>
+                        <li><a href="{{ route('cart.index') }}" class="hover:text-blue-400">Cart</a></li>
                     </ul>
                 </div>
         </div>

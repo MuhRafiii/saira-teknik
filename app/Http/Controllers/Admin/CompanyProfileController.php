@@ -24,28 +24,50 @@ class CompanyProfileController extends Controller
             'address' => 'required',
             'description' => 'nullable',
             'logo' => 'nullable|image|mimes:jpg,jpeg,png,JPG|max:2048',
+            'banner' => 'nullable|image|mimes:jpg,jpeg,png,JPG|max:4096', // validasi banner
+            'gmaps' => 'nullable',
         ]);
 
         $profile = CompanyProfile::first();
 
+        // Handle logo
         if ($request->hasFile('logo')) {
             if ($profile->logo && !str_contains($profile->logo, 'placeholder_dvwraw.png')) {
                 $publicId = $this->getCloudinaryPublicId($profile->logo);
                 Cloudinary::uploadApi()->destroy($publicId);
             }
 
-            $logoUrl = Cloudinary::uploadApi()->upload($request->file('logo')->getRealPath(), ['folder' => 'company-logos'])['secure_url'];
+            $logoUrl = Cloudinary::uploadApi()->upload(
+                $request->file('logo')->getRealPath(),
+                ['folder' => 'company-logos']
+            )['secure_url'];
+
             $profile->logo = $logoUrl;
         }
 
-        $profile->update($request->except('logo'));
+        // Handle banner
+        if ($request->hasFile('banner')) {
+            if ($profile->banner && !str_contains($profile->banner, 'placeholder_banner.png')) {
+                $publicId = $this->getCloudinaryPublicId($profile->banner);
+                Cloudinary::uploadApi()->destroy($publicId);
+            }
+
+            $bannerUrl = Cloudinary::uploadApi()->upload(
+                $request->file('banner')->getRealPath(),
+                ['folder' => 'company-banners']
+            )['secure_url'];
+
+            $profile->banner = $bannerUrl;
+        }
+
+        $profile->update($request->except(['logo', 'banner']));
 
         return redirect()->back()->with('success', 'Company profile updated successfully!');
     }
 
     private function getCloudinaryPublicId($url)
     {
-        $path = parse_url($url, PHP_URL_PATH); // /demo/image/upload/v1234567890/categories/my_image.jpg
+        $path = parse_url($url, PHP_URL_PATH); // /demo/image/upload/v1234567890/folder/my_image.jpg
         $parts = explode('/', $path);
 
         // Cari index bagian "v1234567890"

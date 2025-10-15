@@ -15,14 +15,30 @@
 
         {{-- Detail Produk --}}
         <div class="flex flex-col gap-4 sm:w-1/2 sm:items-center lg:items-baseline lg:w-full sm:mx-auto lg:pr-10">
-            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">{{ $product->name }}</h1>
+            <h1 class="text-2xl sm:text-3xl text-justify font-bold text-gray-900">{{ $product->name }}</h1>
             <p class="text-gray-500 text-sm sm:text-base">{{ $product->category->name ?? '-' }}</p>
             <p class="text-gray-500 text-sm sm:text-base">Stock: {{ $product->stock?? '-' }}</p>
             <p class="text-blue-600 font-bold text-xl sm:text-2xl">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
             
-            <p class="text-gray-700 leading-relaxed text-sm sm:text-base text-justify prose prose-sm sm:prose lg:prose-lg whitespace-pre-line">
-                {{ $product->description ?? 'Tidak ada deskripsi untuk produk ini.' }}
-            </p>
+            <div 
+                x-data="{ expanded: false }" 
+                class="relative text-gray-700 text-sm sm:text-base text-justify whitespace-pre-line -mt-12"
+            >
+                <p 
+                    x-bind:class="expanded ? 'line-clamp-none' : 'line-clamp-5'" 
+                    class="-mb-12"
+                >
+                    {{ $product->description ?? 'Tidak ada deskripsi untuk produk ini.' }}
+                </p>
+
+                {{-- Tombol More/Less --}}
+                <button
+                    type="button"
+                    x-on:click="expanded = !expanded"
+                    class="text-blue-600 font-medium hover:underline focus:outline-none cursor-pointer"
+                    x-text="expanded ? 'Show less' : 'Read more'">
+                </button>
+            </div>
 
             {{-- Form jumlah & tombol --}}
             <div x-data="{ buyNowOpen: false, quantity: 1 }">

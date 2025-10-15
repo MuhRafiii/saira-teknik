@@ -25,7 +25,7 @@
                         href="{{ route('product.show', $product->id) }}"
                         class="block mt-4 text-center bg-blue-500 hover:bg-blue-600 text-white py-1.5 rounded text-sm hover:bg-primary/90 transition"
                     >
-                        Lihat Detail
+                        See Product
                     </a>
                 </div>
             </div>
@@ -38,6 +38,6 @@
     </div>
 @else
     <div class="text-center text-gray-600 py-10">
-        Produk tidak ditemukan.
+        Product not found.
     </div>
 @endif

@@ -3,9 +3,9 @@
 @section('title', 'Shopping Cart')
 
 @section('content')
-  <section class="pt-24 pb-12 min-h-screen bg-gray-50">
+  <section class="pt-10 md:pt-16 pb-12 bg-gray-50">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h1 class="text-2xl sm:text-3xl font-bold mb-6 text-gray-800">Keranjang Belanja</h1>
+      <h1 class="text-2xl sm:text-3xl font-bold mb-6 text-gray-800">Shopping Cart</h1>
 
       @if ($cart)
         <div class="space-y-6">
@@ -17,7 +17,7 @@
                 class="h-24 object-cover rounded"
               />
               <div class="flex-1 w-full">
-                <h2 class="text-lg font-semibold text-gray-800">{{ $item['name'] }}</h2>
+                <h2 class="w-full md:w-2/3 text-lg font-semibold text-gray-800 line-clamp-1">{{ $item['name'] }}</h2>
                 <p class="mt-2 text-primary font-bold">Rp {{ number_format($item['price'], 0, ',', '.') }}</p>
 
                 <form
@@ -76,14 +76,14 @@
             href="{{ route('checkout.index') }}" 
             class="checkout-btn bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-2 rounded-md w-full sm:w-auto text-center"
           >
-            Checkout Sekarang
+            Checkout Now
           </a>
         </div>
       @else
         <div class="text-center text-gray-600 py-16">
-          <p class="text-lg">Keranjang kamu kosong 😢</p>
+          <p class="text-lg">You have no items in your cart.</p>
           <a href="{{ route('product.index') }}" class="mt-4 inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-full text-sm">
-            Lihat Produk
+            Shop Now
           </a>
         </div>
       @endif
@@ -124,3 +124,17 @@
     });
 </script>
 @endpush
+
+@if (session('error'))
+    @push('scripts')
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Out of Stock!',
+                text: '{{ session('error') }}',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#3085d6'
+            });
+        </script>
+    @endpush
+@endif

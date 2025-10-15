@@ -10,15 +10,15 @@
     <div class="flex-1 overflow-y-auto">
       <a href="{{ route('admin.dashboard') }}" class="block py-2 px-4 text-sm sm:text-base hover:bg-gray-700">Dashboard</a>
       <a href="{{ route('admin.company-profile.edit') }}" class="block py-2 px-4 text-sm sm:text-base hover:bg-gray-700">Company Profile</a>
-      <a href="{{ route('admin.categories.index') }}" class="block py-2 px-4 text-sm sm:text-base hover:bg-gray-700">Category</a>
-      <a href="{{ route('admin.products.index') }}" class="block py-2 px-4 text-sm sm:text-base hover:bg-gray-700">Product</a>
-      <a href="{{ route('admin.orders') }}" class="block py-2 px-4 text-sm sm:text-base hover:bg-gray-700">Orders</a>
-      <a href="{{ route('admin.sales-report') }}" class="block py-2 px-4 text-sm sm:text-base hover:bg-gray-700">Sales Report</a>
+      <a href="{{ route('admin.categories.index') }}" class="block py-2 px-4 text-sm sm:text-base hover:bg-gray-700">Categories</a>
+      <a href="{{ route('admin.products.index') }}" class="block py-2 px-4 text-sm sm:text-base hover:bg-gray-700">Products</a>
+      <a href="{{ route('admin.orders.index') }}" class="block py-2 px-4 text-sm sm:text-base hover:bg-gray-700">Orders</a>
+      <a href="{{ route('admin.sales-report.index') }}" class="block py-2 px-4 text-sm sm:text-base hover:bg-gray-700">Sales Report</a>
     </div>
 
-    <form action="{{ route('admin.logout') }}" method="POST" onsubmit="setLoadingState('loading-popup-logout', true)">
+    <form action="{{ route('admin.logout') }}" method="POST" onsubmit="setLoadingState('loading-popup-logout', true)" class="p-4">
       @csrf
-      <button type="submit" class="block w-full text-left py-2 px-4 text-sm sm:text-base hover:bg-red-500 cursor-pointer">Logout</button>
+      <button type="submit" class="block w-full text-center p-2 text-sm rounded-lg bg-red-600 sm:text-base hover:bg-red-500 cursor-pointer">Logout</button>
     </form>
   </nav>
 </aside>

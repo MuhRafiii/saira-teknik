@@ -11,7 +11,7 @@
           Welcome to {{ $company->name }}
         </h1>
         <div class="space-y-4">
-            <a href="https://maps.app.goo.gl/hJ8KLDYWcpPt5vJN6" class="hidden sm:flex justify-center items-center gap-2 text-xs sm:text-sm text-gray-600 hover:underline">
+            <a href="{{$company->gmaps}}" class="hidden sm:flex justify-center items-center gap-2 text-xs sm:text-sm text-gray-600 hover:underline">
                 <img
                     class="w-5"
                     src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAACXBIWXMAAAsTAAALEwEAmpwYAAAGGElEQVR4nO2cbYgVVRzGH3ftRTOzLyUbEYWaZgq9uK53z7mzM5pokIG1RQh9SM0yKuhDEXf2JSsoSUhNK7NCCiNSF+/4Uh+kgiAEKV+CyKJsrT4YKUro6m49cWZvoLttOnPnzJmZOz94YNm3+f+fc+bMnGdmF8jJycnJycnJycnJyUkgLKCBEgsosYoCn1Dge0ocpcSZio76n1NfU9+jvreABtN1pxpaGEuBpyjxNSUYSgJf+b9jOq423U9qoMANlHiTAj2hjR88ED0UeJ0S15vuL7GwCSMo0UmBU5EZP1hquVpJC6NM95soKHErBQ5qNH6gvmMRt5juOxFQYlGky02QZakZD6GWoUB77Mafq78p0YZaxF/vpVHzzz4b2lFLUOBR46bLQVqCWoASjZQ4nQDD+R93SAVkGTZiNCV+ToDZHGIp+okFXI6s4t+DmzZZnlcrkEVo4WYK9FU5Q7spsJoCc2hhIu/AZb7Ux+pzAq9R4HCVx+hlEZOQNSjxQRXG/EKBh2lh+HmPA9RRoJUSh6oYhPeRuXwn7OwX2BpmXVY/Q4lyyGP2ZSo3osRzIWfjKjWjQx9XnQ398XSYY3ciK/h3F2FmPsKbP2AQwpwJPyAL+BfIMGt+Ibrbwcpy9GvgOooYj7RDgaUhBmChhjoWh6jjEaQdCqwPuPR0sxX1kddhYXiIW9R1SDuU+CLohRe6alH7hGCT4XOkncCzrhlztdVSxJ1Bz0akHUocT8qFjwXcGHAAjiHt+Fv7IE0X9IVhlbuhIAPQi7RDgd8DNW3pe2BeSWODXI+OIO1Q4EDAWTchMXsSgf1IO5TYGbDpOYm5CEvsRNqhQEfAAVitrRaJtTX3rJhF2KndiBVhI+3wNowM8d7PwsjrUM8Tgk2EHlU7sgAluoyGcY0YTYHfAtbQhazAIu4L2DwpsSOKpSh0HC3Qioy9eHsixCCsNPRA5oSqGVlCJYuxPpJs9DddXqhjZiEFHQibMbnyLmYYQ46wiCcv+KF8Mx4MseafPehTkUUosCu0KdI35rAfKTdjrr+rtTCqoomVTdaaCF5L2YWswiLmVWWOjEFFzENWITCMEnuNmyyH1DdRvAiQaChwbwKM5hC6B1mnchbsS4DZrLnZ/y8sYn4CDOc5KmI+aokQD+upUV+qMxO1BAWmV7EviFYCzahFKLDJuPkSH6FW4QxcR4E/DZp/Ur25jVqGEm0GB8BFrcObcDEFvjWw7h+khUtN958IKGDFfkEWmGm67yz9CRMDaqPpfpP6/4GOxWD+cTbhGtP9JhKqzF//0vOE6T4TC1tRT4HdGs3freOVl8Tw7FZnqus5rEYrNzTxjF0Xufm9LXVc9e70qmrztX3WFCQVt2y/XHWDnsOP28dFPgA728dVb77nsFS2X0IS6ejoqHM9uzuKJtvKNg89MCYy87vvv4LtZTuSAVA9ql6RNErezJZoGnR8rXhvBk879VWbf8ap56sbmiKrq3+CtFhIGiXPfivKJl3P4fbO8VUPwPbOCZHW5KvsJOu1lcd3zLmk5DnHom60rWzzxwVXhjZf/az6HVHXpXpVPSMpuNvs+ZHPMq9fyzc28+TsiwKbf2rWcL7yfkFLTb622cl5glYqO5u1Neo53LhiSuAB+HD5ZH3m+3dDzmYkgY4ua4xbtnt0Nut6Dvcsbbhg8/c81qC1Fl9lu0f1noSL72LtzXoOl22xeOTukec1/4+7RvD5zZb+AfAHwVlk2n+UPOezWJr1HK5dP419LUPvkvtahvGNdbfHY37/WfCpWfO7Zl9b8uy/YmvY+/9bU/W1OGtRvSsPjA2Au815Js6G3Yr2Lhk7yPwDi6+KvY7+QXCeNjYApbK930TTywZcD9S6/8KmopEBcD17X2qTT7cKrX6n0Y8Zeu06rnl7mrE6jCWkUSWfbhXa8uIkX6briD0hjTL5dDOhmBPSqJNPNwOKNSHVkXy6aVdcCamu5NNNuWJLSHUmn27aFUdCqjv5dFMs7QlpXMmnm1bpTkjjSj7dNEtnQhpn8ummVboSUhPJp5tCaUtITSWfbgqlJSE1lXy6qZShhDQnJycnJycnJycnB2ngH1h4hIJ7ALddAAAAAElFTkSuQmCC"
@@ -19,7 +19,7 @@
                 {{ $company->address }}
             </a>
             <div class="flex items-center justify-center gap-8">
-                <a href="https://maps.app.goo.gl/hJ8KLDYWcpPt5vJN6" class="sm:hidden hover:scale-110 transition duration-300">
+                <a href="{{$company->gmaps}}" class="sm:hidden hover:scale-110 transition duration-300">
                     <img
                         class="w-10"
                         src="data:image/png;base64,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"
@@ -46,20 +46,31 @@
                 </a>
             </div>
         </div>
-        <p class="text-sm sm:text-base lg:text-lg text-gray-600 mb-8">
-          Temukan berbagai produk terbaik hanya di toko kami.
-        </p>
       </div>
 
+      <!-- Banner Section -->
+        <div class="relative w-full h-64 sm:h-80 lg:h-[400px] rounded-md overflow-hidden shadow">
+            <!-- Gambar Background -->
+            <img src="{{$company->banner}}"
+                alt="Banner {{ $company->name }}"
+                class="absolute inset-0 w-full h-full object-cover opacity-30">
+
+            <!-- Teks Overlay -->
+            <div class="absolute inset-0 flex items-center justify-center">
+                <h2 class="text-xl sm:text-2xl lg:text-4xl font-bold text-gray-700 text-center max-w-4xl p-4">
+                    Explore some of our products and find what you’re looking for only at
+                    <span class="text-blue-600">{{ $company->name }}</span>
+                </h2>
+            </div>
+        </div>
+
       <!-- About -->
-      <div class="">
-        <div class="space-y-4 sm:space-y-0 sm:space-x-6 xl:flex xl:items-center xl:gap-2">
-            <img src="{{ $company->logo ?? 'https://res.cloudinary.com/dypiyksms/image/upload/v1754490991/placeholder_dvwraw.png' }}" alt="{{ $company->name }}" class="w-full sm:w-2/5 sm:float-start rounded-md object-cover">
-            <p class="text-base sm:text-lg text-gray-600 text-justify">
+        <div class="space-y-4 sm:space-y-0 sm:space-x-6 xl:space-x-7">
+            <img src="{{ $company->logo ?? 'https://res.cloudinary.com/dypiyksms/image/upload/v1754490991/placeholder_dvwraw.png' }}" alt="{{ $company->name }}" class="w-full sm:w-1/5 sm:float-start rounded-md object-cover">
+            <p class="text-base sm:text-lg lg:text-xl text-gray-600 text-justify">
                 {{ $company->description }}
             </p>
         </div>
-      </div>
 
       <!-- Featured Products / Categories -->
       @if ($products->count())

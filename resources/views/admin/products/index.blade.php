@@ -5,13 +5,42 @@
 
 @section('content')
     <div id="page-content" class="bg-white p-4 sm:p-6 rounded shadow w-full overflow-x-auto">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
-            <h2 class="text-lg font-semibold text-gray-800 mb-2 sm:mb-0">All Products</h2>
-            <a href="{{ route('admin.products.create') }}"
-               class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-md text-sm transition"
-               >
-                + Create Product
-            </a>
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-2">
+            <h2 class="text-lg font-semibold text-gray-800">All Products</h2>
+            <div class="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
+                <form id="filter-form" method="GET" action="{{ route('admin.products.index') }}" class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                    <!-- Input search -->
+                    <input 
+                        type="text" 
+                        id="search-input"
+                        name="search" 
+                        value="{{ request('search') }}"
+                        placeholder="Search product..."
+                        class="px-3 py-2 border border-gray-500 rounded-md text-sm w-full sm:w-48"
+                        oninput="this.form.submit()"
+                    >
+
+                    <!-- Select category -->
+                    <select 
+                        id="category-select"
+                        name="category" 
+                        class="px-3 py-2 border border-gray-500 rounded-md text-sm w-full sm:w-40"
+                        onchange="this.form.submit()"
+                    >
+                        <option value="">All Categories</option>
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
+                                {{ $category->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </form>
+
+                <a href="{{ route('admin.products.create') }}"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-md text-sm transition">
+                    + Create Product
+                </a>
+            </div>
         </div>
 
         @if (session('success'))
@@ -37,9 +66,17 @@
                     @forelse ($products as $i => $product)
                         <tr class="h-20 hover:bg-gray-50 text-center">
                             <td class="px-4 py-3 border-b">{{ ($products->currentPage() - 1) * $products->perPage() + ($i + 1) }}</td>
-                            <td class="px-4 py-3 border-b">{{ $product->name }}</td>
+                            <td class="px-4 py-3 border-b">
+                                <p class="max-w-50 line-clamp-2">
+                                    {{ $product->name }}
+                                </p>
+                            </td>
                             <td class="px-4 py-3 border-b">{{ $product->category->name ?? '-' }}</td>
-                            <td class="px-4 py-3 border-b">Rp. {{ number_format($product->price, 0, ',', '.') }}</td>
+                            <td class="px-4 py-3 border-b">
+                                <p class="w-25 sm:w-30">
+                                    Rp. {{ number_format($product->price, 0, ',', '.') }}
+                                </p>
+                            </td>
                             <td class="px-4 py-3 border-b">{{ $product->stock }}</td>
                             <td class="px-4 py-3 border-b">
                                 @if ($product->image)
@@ -91,6 +128,27 @@
 
 @push('scripts')
     <script>
+        const form = document.getElementById('filter-form');
+        const searchInput = document.getElementById('search-input');
+        const categorySelect = document.getElementById('category-select');
+
+        let debounceTimer;
+
+        // Debounce search (100ms)
+        searchInput.addEventListener('input', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                setLoadingState('loading-popup', true);
+                form.submit();
+            }, 1000);
+        });
+
+        // Category change langsung submit
+        categorySelect.addEventListener('change', () => {
+            setLoadingState('loading-popup', true);
+            form.submit();
+        });
+
         document.querySelectorAll('.delete-product').forEach(form => {
             form.addEventListener('submit', function (e) {
                 e.preventDefault(); // Cegah submit langsung

@@ -5,27 +5,68 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\OrderPaid;
+use App\Mail\PaymentMail;
+use Midtrans\Config;
+use Midtrans\Notification;
+use Illuminate\Support\Facades\Log;
 
 class MidtransWebhookController extends Controller
 {
-    public function handle(Request $request)
+    public function handleCallback(Request $request)
     {
-        $serverKey = config('midtrans.server_key');
-        $hashed = hash('sha512', $request->order_id.$request->status_code.$request->gross_amount.$serverKey);
-        if ($hashed !== $request->signature_key) {
-            return response()->json(['message' => 'Invalid signature'], 403);
+        // Konfigurasi Midtrans
+        Config::$serverKey = env('MIDTRANS_SERVER_KEY');
+        Config::$isProduction = env('MIDTRANS_IS_PRODUCTION');
+        Config::$isSanitized = true;
+        Config::$is3ds = true;
+
+        try {
+            $notif = new Notification();
+
+            $transaction = $notif->transaction_status;
+            $fraud = $notif->fraud_status;
+            $orderId = $notif->order_id;
+
+            $order = Order::where('id', $orderId)->first();
+            if (!$order) {
+                return response()->json(['error' => 'Order not found'], 404);
+            }
+
+            // Tangani status transaksi
+            if ($transaction == 'capture') {
+                if ($fraud == 'accept') {
+                    $this->updateOrderStatus($order, 'paid');
+                }
+            } elseif ($transaction == 'settlement') {
+                $this->updateOrderStatus($order, 'paid');
+            } elseif ($transaction == 'cancel') {
+                $this->updateOrderStatus($order, 'cancelled');
+            } elseif ($transaction == 'deny') {
+                $this->updateOrderStatus($order, 'failed');
+            }
+
+            return response()->json(['message' => 'Callback handled successfully.']);
+        } catch (\Exception $e) {
+            Log::error('Midtrans Callback Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Something went wrong'], 500);
         }
+    }
 
-        $order = Order::find($request->order_id);
-        if (!$order) return response()->json(['message' => 'Order not found'], 404);
+    protected function updateOrderStatus(Order $order, string $status)
+    {
+        $order->update([
+            'status' => $status,
+            'payment_date' => now(),
+        ]);
 
-        if ($request->transaction_status == 'settlement' || $request->transaction_status == 'capture') {
-            $order->status = 'paid';
-            $order->save();
-            Mail::to($order->email)->send(new OrderPaid($order));
+        // Kirim email jika pembayaran berhasil
+        if ($status === 'paid') {
+            try {
+                Mail::to($order->email)->send(new PaymentMail($order));
+                Log::info('Payment confirmation email sent to ' . $order->email);
+            } catch (\Exception $e) {
+                Log::error('Failed to send email: ' . $e->getMessage());
+            }
         }
-
-        return response()->json(['message' => 'OK']);
     }
 }

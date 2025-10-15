@@ -41,7 +41,7 @@ Route::prefix('checkout')->name('checkout.')->group(function () {
 });
 
 // Midtrans
-Route::post('/midtrans/webhook', [MidtransWebhookController::class, 'handle']);
+Route::post('/midtrans/callback', [MidtransWebhookController::class, 'handleCallback'])->name('midtrans.callback');
 
 // Admin
 // Auth admin
@@ -54,14 +54,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
 // Panel admin
 Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function () {
     Route::get('/', [AdminAuthController::class, 'index'])->name('dashboard');
-    Route::get('/orders', [OrderController::class, 'completedOrders'])->name('orders');
-    Route::get('/sales-report', [SalesReportController::class, 'salesReport'])->name('sales-report');
-
+    
     Route::prefix('company-profile')->name('company-profile.')->group(function () {
         Route::get('/edit', [CompanyProfileController::class, 'edit'])->name('edit');
         Route::put('/update', [CompanyProfileController::class, 'update'])->name('update');
     });
-
+    
     Route::prefix('categories')->name('categories.')->group(function () {
         Route::get('/', [AdminCategoryController::class, 'index'])->name('index');
         Route::get('/create', [AdminCategoryController::class, 'create'])->name('create');
@@ -70,7 +68,7 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         Route::put('/{id}', [AdminCategoryController::class, 'update'])->name('update');
         Route::delete('/{id}', [AdminCategoryController::class, 'destroy'])->name('destroy');
     });
-
+    
     Route::prefix('products')->name('products.')->group(function () {
         Route::get('/', [AdminProductController::class, 'index'])->name('index');
         Route::get('/create', [AdminProductController::class, 'create'])->name('create');
@@ -78,6 +76,17 @@ Route::prefix('admin')->name('admin.')->middleware('checkAdmin')->group(function
         Route::get('/{id}/edit', [AdminProductController::class, 'edit'])->name('edit');
         Route::put('/{id}', [AdminProductController::class, 'update'])->name('update');
         Route::delete('/{id}', [AdminProductController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('orders')->name('orders.')->group(function () {
+        Route::get('/', [OrderController::class, 'index'])->name('index');
+        Route::patch('/{order}/status', [OrderController::class, 'updateStatus'])->name('update-status');
+    });
+
+    Route::prefix('sales-report')->name('sales-report.')->group(function () {
+        Route::get('/', [SalesReportController::class, 'index'])->name('index');
+        Route::get('/export-excel', [SalesReportController::class, 'exportExcel'])->name('export-excel');
+        Route::get('/export-pdf', [SalesReportController::class, 'exportPdf'])->name('export-pdf');
     });
 });
 

@@ -3,7 +3,7 @@
 @section('title', 'Categories')
 
 @section('content')
-  <section class="pt-16 md:pt-24 pb-12 bg-white min-h-screen">
+  <section class="pt-16 pb-12 bg-white min-h-screen">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-24">
         <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">All Categories</h1>

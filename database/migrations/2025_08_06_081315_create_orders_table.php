@@ -19,6 +19,9 @@ return new class extends Migration
             $table->text('address');
             $table->enum('status', ['pending', 'paid', 'shipped', 'completed'])->default('pending');
             $table->decimal('total', 12, 2);
+            $table->timestamp('payment_date')->nullable();
+            $table->timestamp('shipping_date')->nullable();
+            $table->timestamp('completion_date')->nullable();
             $table->timestamps();
         });
     }

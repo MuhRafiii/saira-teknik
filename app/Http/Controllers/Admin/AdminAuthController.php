@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Models\CompanyProfile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -12,7 +13,10 @@ class AdminAuthController extends Controller
 {
     public function showLoginForm()
     {
-        return view('admin.auth.login');
+        $company = CompanyProfile::first()->name;
+        $logo = CompanyProfile::first()->logo;
+
+        return view('admin.auth.login', compact('logo', 'company'));
     }
 
     public function login(Request $request)
