@@ -43,12 +43,24 @@
                 </div>
 
                 <!-- Right Column: Payment Button -->
-                <div class="flex flex-col items-center justify-center bg-gray-50 p-6 rounded-lg shadow-inner">
+                {{-- <div class="flex flex-col items-center justify-center bg-gray-50 p-6 rounded-lg shadow-inner">
                     <p class="text-lg font-medium mb-4 text-gray-700">Want to make a payment?</p>
                     <button id="pay-button" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-xl transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 cursor-pointer">
                         Pay Now
                     </button>
                     <p class="text-sm text-gray-500 mt-4">Total to be paid: <span class="font-semibold text-gray-800">Rp{{ number_format($order->total, 0, ',', '.') }}</span></p>
+                </div> --}}
+                <div class="flex flex-col items-center justify-center bg-gray-50 p-6 rounded-lg shadow-inner">
+                    <p class="text-lg font-medium mb-4 text-gray-700">Want to make a payment?</p>
+                    <button 
+                        class="bg-gray-400 text-white font-bold py-3 px-6 rounded-lg text-xl cursor-not-allowed opacity-60" 
+                        disabled>
+                        Payment Disabled
+                    </button>
+
+                    <p class="text-red-600 text-sm mt-3 text-center">
+                        We’re sorry, online payment is not available at the moment. Your order has been received, and we will reach out to you for the next steps.
+                    </p>
                 </div>
             </div>
         </div>
@@ -56,7 +68,7 @@
 @endsection
 
 @push('scripts')
-<script>
+{{-- <script>
     document.getElementById('pay-button').onclick = function () {
         snap.pay('{{ $snapToken }}', {
             onSuccess: function(result) {
@@ -101,5 +113,13 @@
             }
         });
     };
+</script> --}}
+<script>
+    Swal.fire({
+        title: "Order Placed Successfully!",
+        text: "Order details have been sent to {{ $order->email }}.",
+        icon: "success",
+        confirmButtonText: "OK"
+    });
 </script>
 @endpush

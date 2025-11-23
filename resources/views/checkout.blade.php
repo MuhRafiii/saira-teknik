@@ -80,3 +80,27 @@
     </div>
   </section>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector('form');
+
+        if (form) {
+            form.addEventListener('submit', function () {
+                Swal.fire({
+                    title: "Processing your order",
+                    text: "Please wait while we place your order...",
+                    icon: "info",
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    showConfirmButton: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+            });
+        }
+    });
+</script>
+@endpush

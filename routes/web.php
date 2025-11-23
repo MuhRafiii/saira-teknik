@@ -41,7 +41,7 @@ Route::prefix('checkout')->name('checkout.')->group(function () {
 });
 
 // Midtrans
-Route::post('/midtrans/callback', [MidtransWebhookController::class, 'handleCallback'])->name('midtrans.callback');
+// Route::post('/midtrans/callback', [MidtransWebhookController::class, 'handleCallback'])->name('midtrans.callback');
 
 // Admin
 // Auth admin
