@@ -1,0 +1,38 @@
+name: Deploy to Rumahweb via FTP
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      # Install PHP dependencies
+      - name: Install Composer Dependencies
+        run: composer install --no-dev --optimize-autoloader
+
+      # Build Laravel assets
+      - name: Install Node & Build Assets
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+      - run: |
+          npm install
+          npm run build
+
+      # Copy project via FTP
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.3
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: 21
+          local-dir: ./
+          server-dir: /home/saig3358/public_html/sairaprint.com/sairaweb/
