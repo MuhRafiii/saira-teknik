@@ -36,3 +36,9 @@ jobs:
           port: 21
           local-dir: ./
           server-dir: /home/saig3358/public_html/sairaprint.com/sairaweb/
+          exclude: |
+            **/vendor/**
+            **/node_modules/**
+            **/.env
+            **/.git**
+            **/.github**
