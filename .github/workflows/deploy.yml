@@ -35,7 +35,7 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           port: 21
           local-dir: ./
-          server-dir: /home/saig3358/public_html/
+          server-dir: ./
           exclude: |
             **/vendor/**
             **/node_modules/**
