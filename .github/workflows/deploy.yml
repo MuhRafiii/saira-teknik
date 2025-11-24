@@ -37,7 +37,6 @@ jobs:
           local-dir: ./
           server-dir: ./
           exclude: |
-            **/vendor/**
             **/node_modules/**
             **/.env
             **/.git**
