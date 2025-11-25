@@ -8,7 +8,7 @@
     @php
         $company = \App\Models\CompanyProfile::first();
     @endphp
-    <link rel="icon" type="image/jpeg" href="{{ $company?->logo ?? asset('default-favicon.jpg') }}">
+    <link rel="icon" href="{{ $company?->logo ?? asset('default-favicon.jpg') }}">
 
     @vite('resources/css/app.css')
     <script src="https://app.sandbox.midtrans.com/snap/snap.js" 
