@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   @vite('resources/css/app.css')
   <title>Admin Login</title>
+  <link rel="icon" href="{{ $logo ?? asset('default-favicon.jpg') }}">
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center relative overflow-hidden">
 
