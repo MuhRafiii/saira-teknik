@@ -8,8 +8,9 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
-// use Midtrans\Config;
-// use Midtrans\Snap;
+use Illuminate\Support\Facades\Log;
+use Midtrans\Config;
+use Midtrans\Snap;
 use App\Mail\OrderConfirmationMail;
 
 class CheckoutController extends Controller
@@ -78,53 +79,53 @@ class CheckoutController extends Controller
             session()->forget('cart');
         }
 
-        // Config::$serverKey = env('MIDTRANS_SERVER_KEY');
-        // Config::$isProduction = env('MIDTRANS_IS_PRODUCTION');
-        // Config::$isSanitized = true;
-        // Config::$is3ds = true;
+        Config::$serverKey = env('MIDTRANS_SERVER_KEY');
+        Config::$isProduction = env('MIDTRANS_IS_PRODUCTION');
+        Config::$isSanitized = true;
+        Config::$is3ds = true;
 
-        // $transaction_details = [
-        //     'order_id' => $order->id,
-        //     'gross_amount' => $order->total,
-        // ];
+        $transaction_details = [
+            'order_id' => $order->id,
+            'gross_amount' => $order->total,
+        ];
 
-        // $customer_details = [
-        //     'first_name' => $order->name,
-        //     'email' => $order->email,
-        //     'phone' => $order->phone,
-        // ];
+        $customer_details = [
+            'first_name' => $order->name,
+            'email' => $order->email,
+            'phone' => $order->phone,
+        ];
 
-        // $item_details = [];
-        // foreach ($order->items as $item) {
-        //     $item_details[] = [
-        //         'id' => $item->product_id,
-        //         'price' => $item->price,
-        //         'quantity' => $item->quantity,
-        //         'name' => $item->product->name,
-        //     ];
-        // }
+        $item_details = [];
+        foreach ($order->items as $item) {
+            $item_details[] = [
+                'id' => $item->product_id,
+                'price' => $item->price,
+                'quantity' => $item->quantity,
+                'name' => $item->product->name,
+            ];
+        }
 
-        // $transaction = [
-        //     'transaction_details' => $transaction_details,
-        //     'customer_details' => $customer_details,
-        //     'item_details' => $item_details,
-        // ];
+        $transaction = [
+            'transaction_details' => $transaction_details,
+            'customer_details' => $customer_details,
+            'item_details' => $item_details,
+        ];
 
         try {
             Mail::to($order->email)->send(new OrderConfirmationMail($order));
         } catch (\Exception $e) {
-            \Log::error("Failed to send order confirmation email: " . $e->getMessage());
+            Log::error("Failed to send order confirmation email: " . $e->getMessage());
         }
 
-        // try {
-        //     $snapToken = Snap::getSnapToken($transaction);
-        // } catch (\Exception $e) {
-        //     echo $e->getMessage();
-        // }
+        try {
+            $snapToken = Snap::getSnapToken($transaction);
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+        }
 
-        // return view('payment', compact('snapToken', 'order'));
+        return view('payment', compact('snapToken', 'order'));
 
-        return view('payment', compact('order'));
+        // return view('payment', compact('order'));
     }
 
     public function buyNow(Request $request, $id)
