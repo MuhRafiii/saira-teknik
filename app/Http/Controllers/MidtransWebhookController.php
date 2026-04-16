@@ -14,6 +14,12 @@ class MidtransWebhookController extends Controller
 {
     public function handleCallback(Request $request)
     {
+        if (!$request->getContent()) {
+            return response()->json([
+                'message' => 'Webhook endpoingt active'
+            ]);
+        }
+        
         // Konfigurasi Midtrans
         Config::$serverKey = env('MIDTRANS_SERVER_KEY');
         Config::$isProduction = env('MIDTRANS_IS_PRODUCTION');
