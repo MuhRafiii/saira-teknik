@@ -5,26 +5,31 @@ RUN apt-get update && apt-get install -y \
     git \
     curl \
     unzip \
+    zip \
+    nodejs \
+    npm \
     libpng-dev \
-    libjpeg-dev \
+    libjpeg62-turbo-dev \
     libfreetype6-dev \
     libzip-dev \
     libonig-dev \
     libxml2-dev \
-    zip \
-    nodejs \
-    npm
+    libicu-dev
+
+# Configure GD
+RUN docker-php-ext-configure gd \
+    --with-freetype \
+    --with-jpeg
 
 # Install PHP extensions
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install \
-        pdo_mysql \
-        gd \
-        zip \
-        mbstring \
-        bcmath \
-        pcntl \
-        intl
+RUN docker-php-ext-install \
+    pdo_mysql \
+    gd \
+    zip \
+    mbstring \
+    bcmath \
+    pcntl \
+    intl
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -37,17 +42,17 @@ COPY . .
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Install Node dependencies & build assets
+# Install Node dependencies
 RUN npm install
+
+# Build Vite assets
 RUN npm run build
 
-# Clear Laravel cache (safe even if not configured yet)
+# Laravel cache clear
 RUN php artisan config:clear || true
 RUN php artisan route:clear || true
 RUN php artisan view:clear || true
 
-# Railway port
 EXPOSE 8080
 
-# Start Laravel server
 CMD php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
