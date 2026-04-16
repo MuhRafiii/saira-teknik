@@ -23,5 +23,8 @@ class AppServiceProvider extends ServiceProvider
          if (request()->isSecure() || str_contains(request()->getHost(), 'ngrok-free.dev')) {
             URL::forceScheme('https');
         }
+        if (config('app.env') === 'production') {
+            URL::forceScheme('https');
+        }
     }
 }
