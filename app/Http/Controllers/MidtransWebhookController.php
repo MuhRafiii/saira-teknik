@@ -14,9 +14,14 @@ class MidtransWebhookController extends Controller
 {
     public function handleCallback(Request $request)
     {
+        Log::info('MIDTRANS HIT', [
+            'method' => $request->method(),
+            'content' => $request->getContent(),
+        ]);
+        
         if (!$request->getContent()) {
             return response()->json([
-                'message' => 'Webhook endpoingt active'
+                'message' => 'Webhook endpoint active'
             ]);
         }
         
