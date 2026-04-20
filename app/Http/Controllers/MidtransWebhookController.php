@@ -18,13 +18,14 @@ class MidtransWebhookController extends Controller
             'method' => $request->method(),
             'content' => $request->getContent(),
         ]);
-        
+
+        // Handle test ping (tanpa body)
         if (!$request->getContent()) {
             return response()->json([
                 'message' => 'Webhook endpoint active'
             ]);
         }
-        
+
         // Konfigurasi Midtrans
         Config::$serverKey = env('MIDTRANS_SERVER_KEY');
         Config::$isProduction = env('MIDTRANS_IS_PRODUCTION');
@@ -34,16 +35,43 @@ class MidtransWebhookController extends Controller
         try {
             $notif = new Notification();
 
+            Log::info('MIDTRANS PARSED', [
+                'order_id' => $notif->order_id ?? null,
+                'status' => $notif->transaction_status ?? null,
+            ]);
+
+            // ✅ VALIDASI SIGNATURE (WAJIB)
+            $serverKey = env('MIDTRANS_SERVER_KEY');
+
+            $expectedSignature = hash('sha512',
+                $notif->order_id .
+                $notif->status_code .
+                $notif->gross_amount .
+                $serverKey
+            );
+
+            if ($notif->signature_key !== $expectedSignature) {
+                Log::warning('Invalid Midtrans signature', [
+                    'expected' => $expectedSignature,
+                    'received' => $notif->signature_key
+                ]);
+
+                return response()->json(['message' => 'Invalid signature'], 403);
+            }
+
             $transaction = $notif->transaction_status;
             $fraud = $notif->fraud_status;
             $orderId = $notif->order_id;
 
             $order = Order::where('id', $orderId)->first();
+
+            // ⚠️ JANGAN RETURN 404 (biar Midtrans ga retry terus)
             if (!$order) {
-                return response()->json(['error' => 'Order not found'], 404);
+                Log::warning('Order not found', ['order_id' => $orderId]);
+                return response()->json(['message' => 'Order not found'], 200);
             }
 
-            // Tangani status transaksi
+            // Handle status transaksi
             if ($transaction == 'capture') {
                 if ($fraud == 'accept') {
                     $this->updateOrderStatus($order, 'paid');
@@ -54,12 +82,23 @@ class MidtransWebhookController extends Controller
                 $this->updateOrderStatus($order, 'cancelled');
             } elseif ($transaction == 'deny') {
                 $this->updateOrderStatus($order, 'failed');
+            } elseif ($transaction == 'expire') {
+                $this->updateOrderStatus($order, 'expired');
+            } elseif ($transaction == 'pending') {
+                // optional: bisa disimpan kalau mau
+                Log::info('Transaction pending', ['order_id' => $orderId]);
             }
 
-            return response()->json(['message' => 'Callback handled successfully.']);
+            return response()->json(['message' => 'Callback handled successfully.'], 200);
+
         } catch (\Exception $e) {
-            Log::error('Midtrans Callback Error: ' . $e->getMessage());
-            return response()->json(['error' => 'Something went wrong'], 500);
+            Log::error('MIDTRANS ERROR', [
+                'message' => $e->getMessage(),
+                'body' => $request->getContent()
+            ]);
+
+            // ⚠️ PENTING: tetap return 200
+            return response()->json(['message' => 'Handled'], 200);
         }
     }
 
