@@ -111,24 +111,11 @@ class MidtransWebhookController extends Controller
 
         // Kirim email jika pembayaran berhasil
         if ($status === 'paid') {
-            Log::info('WEBHOOK EMAIL PROCESS START', [
-                'email' => $order->email
-            ]);
-
             try {
                 Mail::to($order->email)->send(new PaymentMail($order));
-
-                Log::info('WEBHOOK EMAIL SUCCESS', [
-                    'email' => $order->email
-                ]);
+                Log::info('Payment confirmation email sent to ' . $order->email);
             } catch (\Exception $e) {
-                Log::error('WEBHOOK EMAIL FAILED', [
-                    'error' => $e->getMessage()
-                ]);
-
-                return response()->json([
-                    'error' => 'Email failed: ' . $e->getMessage()
-                ], 500);
+                Log::error('Failed to send email: ' . $e->getMessage());
             }
         }
     }

@@ -111,24 +111,10 @@ class CheckoutController extends Controller
             'item_details' => $item_details,
         ];
 
-      Log::info('EMAIL PROCESS START', [
-            'email' => $order->email
-        ]);
-
         try {
             Mail::to($order->email)->send(new OrderConfirmationMail($order));
-
-            Log::info('EMAIL SUCCESS', [
-                'email' => $order->email
-            ]);
         } catch (\Exception $e) {
-            Log::error('EMAIL FAILED', [
-                'error' => $e->getMessage()
-            ]);
-
-            return response()->json([
-                'error' => $e->getMessage()
-            ], 500);
+            Log::error("Failed to send order confirmation email: " . $e->getMessage());
         }
 
         try {
